@@ -1,16 +1,7 @@
 ﻿#pragma warning disable CS8602
 #pragma warning disable CS8601
 #pragma warning disable CS8600
-using DonkeyKongGame;
-using System.Diagnostics;
-using System;
 using System.Drawing;
-using System.Numerics;
-using System.Reflection.Emit;
-using System.Runtime.InteropServices;
-using static System.Net.Mime.MediaTypeNames;
-using System.Threading;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DonkeyKongGame
 {
