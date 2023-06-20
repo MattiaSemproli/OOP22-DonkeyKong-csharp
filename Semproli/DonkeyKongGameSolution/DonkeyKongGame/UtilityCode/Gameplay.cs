@@ -8,6 +8,8 @@ namespace DonkeyKongGame
 {
     public class Gameplay : IGameplay
     {
+        private bool _win = false;
+
         public List<IEntity> Entities { get; }
 
         public Gameplay() => Entities = new List<IEntity>();
@@ -20,6 +22,16 @@ namespace DonkeyKongGame
         public void RemoveEntity<E>(E entity) where E : IEntity
         {
             Entities.Remove(entity);
+        }
+
+        public void SetWin()
+        {
+            this._win = true;
+        }
+
+        public bool IsWin()
+        {
+            return this._win;
         }
     }
 }

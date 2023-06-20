@@ -13,5 +13,9 @@ namespace DonkeyKongGame
         void AddEntity<E>(E entity) where E : IEntity;
 
         void RemoveEntity<E>(E entity) where E : IEntity;
+
+        void SetWin();
+
+        bool IsWin();
     }
 }

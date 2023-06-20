@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace DonkeyKongGame
 {
-    public interface IEntityFactory
+    public class ThrowComponent : AbstractComponent
     {
-        IEntity GeneratePlayer(Pair<float, float> pos);
-
-        IEntity GeneratePrincess(Pair<float, float> pos);
+        public override void Update()
+        {
+        }
     }
 }

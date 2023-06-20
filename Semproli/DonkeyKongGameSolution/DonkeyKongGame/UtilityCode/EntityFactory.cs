@@ -21,5 +21,11 @@ namespace DonkeyKongGame
                 .AddComponent(new CollisionComponent(pos.GetX, pos.GetY))
                 .AddComponent(new MovementComponent());
         }
+
+        public IEntity GeneratePrincess(Pair<float, float> pos)
+        {
+            return new Entity(Type.PRINCESS, pos, _g)
+                .AddComponent(new CollisionComponent(pos.GetX, pos.GetY));
+        }
     }
 }

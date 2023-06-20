@@ -1,4 +1,5 @@
 ﻿#pragma warning disable CS8602
+#pragma warning disable CS8601
 #pragma warning disable CS8600
 using DonkeyKongGame;
 using System.Diagnostics;
@@ -40,10 +41,7 @@ namespace DonkeyKongGame
                 this.hitbox.Y = nextPosition.GetY;
                 if (eType == Type.PLAYER)
                 {
-                    this.checkPlayerPlatformCollision(entity);
-                    this.checkPlayerLadderCollision(entity);
-                    this.checkPlayerWallCollision(entity);
-                    this.checkPlayerState(entity);
+                    this.CheckPlayerWallCollision(entity);
                 }
             }
             else
@@ -54,26 +52,50 @@ namespace DonkeyKongGame
             }
             if (eType == Type.PLAYER)
             {
-                this.checkIsCollidingWithOtherEntities(entity);
+                this.CheckIsCollidingWithOtherEntities(entity);
             }
         }
 
-        private void checkPlayerPlatformCollision(IEntity entity)
+        private void CheckPlayerWallCollision(IEntity entity) 
         {
-            MovementComponent mc = entity.GetComponent<MovementComponent>();
-            if(this.nextPosition.GetY > entity.Position.GetY)
+            if(hitbox.Y > DEFAULT_WALL) 
             {
-                entity.Gameplay.Entities
-                    .Where(e => !this.checkIsNotBlock(e.Etype))
-                    .Where(e =>
-                    {
-                        RectangleF e2Hitbox = e.GetComponent<CollisionComponent>().Gethitbox();
-                        
-                    });
+                entity.Gameplay.RemoveEntity(entity);
+            }
+            else if(hitbox.X > DEFAULT_WALL - DEFAULT_DIMENSION)
+            {
+                entity.Position = new Pair<float, float>(DEFAULT_WALL - DEFAULT_DIMENSION, this.nextPosition.GetY);
+            }
+            else if (hitbox.Y < 0)
+            {
+                entity.Position = new Pair<float, float>(this.nextPosition.GetX, 0);
+            }
+            else if (hitbox.X < 0)
+            {
+                entity.Position = new Pair<float, float>(0f, this.nextPosition.GetY);
+            }
+            else
+            {
+                entity.Position = this.nextPosition;
             }
         }
 
-        private bool checkIsNotBlock(Type type)
+        private void CheckIsCollidingWithOtherEntities(IEntity entity) 
+        {
+            entity.Gameplay.Entities
+                .Where(e => !e.Equals(entity) && this.CheckIsNotBlock(e.Etype))
+                .Where(e => hitbox.IntersectsWith(e.GetComponent<CollisionComponent>().Gethitbox()))
+                .ToList()
+                .ForEach(e => 
+                {
+                    if(e.Etype == Type.PRINCESS)
+                    {
+                        entity.Gameplay.SetWin();
+                    }
+                });
+        }
+
+        private bool CheckIsNotBlock(Type type)
         {
             return type != Type.BLOCK
                 && type != Type.BLOCK_LADDER_DOWN
